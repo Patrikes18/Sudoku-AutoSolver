@@ -15,7 +15,9 @@ export default function Form() {
             <div className='flex justify-center'>
                 <Sudoku widthCell={widthCell} heightCell={heightCell}/>
             </div>
-            <button type="submit">Odoslať</button>
+            <div className='flex justify-center mt-10'>
+                <button type="submit" className="flex p-1 bg-sky-400 border-4 border-black border-sky-300 rounded-md">Odoslať</button>
+            </div>
         </form>
     );
 }
