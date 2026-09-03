@@ -1,8 +1,11 @@
+import { Language, translations } from "../i18n";
+
 type InputDimensionsProps = {
     widthCell: number;
     heightCell: number;
     onWidthChange: (value: number) => void;
     onHeightChange: (value: number) => void;
+    language: Language;
 };
 
 
@@ -11,12 +14,15 @@ export default function InputDimensions({
     heightCell,
     onWidthChange,
     onHeightChange,
+    language,
 }: InputDimensionsProps){
+    const text = translations[language];
+
     return (
         <div className="flex justify-center">
-            <div className="flex w-1/2 grid grid-cols-2 gap-y-3 p-10 ">
+            <div className="flex grid grid-cols-2 gap-y-3 p-10 ">
                 <label>
-                    Výška bunky: 
+                    {text.cellHeight}
                 </label>
                 <input
                     type="number"
@@ -26,7 +32,7 @@ export default function InputDimensions({
                     min={0}
                 />
                 <label>
-                    Šírka bunky: 
+                    {text.cellWidth}
                 </label>
                 <input
                     type="number"

@@ -1,30 +1,37 @@
-import { useEffect, useState} from "react";
+import { useEffect} from "react";
 
-type SudokuProps = {
+interface SudokuProps {
     widthCell: number;
     heightCell: number;
+    matrix: number[][];
+    setMatrix: React.Dispatch<React.SetStateAction<number[][]>>;
+    changedCells: Set<string>;
+    setChangedCells: React.Dispatch<React.SetStateAction<Set<string>>>;
 };
 
 export default function Sudoku({
     widthCell,
     heightCell,
+    matrix,
+    setMatrix,
+    changedCells,
+    setChangedCells,
 }: SudokuProps) {
-    const width = widthCell * 3
-    const height = heightCell * 3
+    const width = widthCell * heightCell
+    const height = heightCell * widthCell
 
-    const [matrix, setMatrix] = useState<number[][]>([]);
     useEffect(() => {
         setMatrix(prev =>
             Array.from({ length: height }, (_, row) =>
-                Array.from({ length: width }, (_, col) =>
-                    prev[row]?.[col] ?? 0
+                Array.from(
+                    { length: width },
+                    (_, col) => prev[row]?.[col] ?? 0
                 )
             )
         );
-    }, [width, height]);
+    }, [width, height, setMatrix]);
 
-    const dimensions = (widthCell * heightCell)
-    const digits = (""+dimensions).length
+    const dimensions = widthCell * heightCell
 
     return (
         <div
@@ -39,22 +46,43 @@ export default function Sudoku({
                     <input
                         key={`${rowIndex}-${colIndex}`}
                         value={value === 0 ? "" : value}
-                        type="text"
-                        maxLength={digits}
+                        type="number"
+                        onFocus={(e) => {
+                            if (value !== 0) {
+                                e.currentTarget.select();
+                            }
+                        }}
+                        onClick={(e) => {
+                            if (value !== 0) {
+                                e.currentTarget.select();
+                            }
+                        }}
                         onChange={(e) => {
                             const newMatrix = matrix.map(r => [...r]);
 
-                            const val = Number(e.target.value);
-                            newMatrix[rowIndex][colIndex] = Number.isNaN(val) ? 0 : val;
+                            const val = e.target.value === "" ? 0 : Number(e.target.value);
+
+                            if (!Number.isInteger(val) || val < 0 || val > dimensions) {
+                                return;
+                            }
+
+                            newMatrix[rowIndex][colIndex] = val;
 
                             setMatrix(newMatrix);
+                            setChangedCells(prev => {
+                                const next = new Set(prev);
+                                next.delete(`${rowIndex}-${colIndex}`);
+                                return next;
+                            });
                         }}
                         className={`
+                        sudoku-cell
                         w-12 h-12
                         text-center text-xl
                         border
                         border-gray-400
                         focus:outline-none focus:bg-blue-100
+                        ${changedCells.has(`${rowIndex}-${colIndex}`) ? "bg-green-200" : ""}
 
                         ${colIndex % widthCell === 0 ? "border-l-2 border-l-black" : ""}
                         ${rowIndex % heightCell === 0 ? "border-t-2 border-t-black" : ""}

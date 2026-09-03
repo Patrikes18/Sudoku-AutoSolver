@@ -25,3 +25,8 @@ frontend/yarn-error.log*
 
 frontend/.vscode
 .env
+
+# Python
+__pycache__/
+*.py[cod]
+backend/venv/

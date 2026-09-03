@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .sudoku-cell {
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+
+  .sudoku-cell::-webkit-inner-spin-button,
+  .sudoku-cell::-webkit-outer-spin-button {
+    margin: 0;
+    -webkit-appearance: none;
+  }
+}
