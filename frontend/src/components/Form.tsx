@@ -3,6 +3,8 @@ import InputDimensions from './InputDimensions';
 import { useState } from "react";
 import { Language, translations } from "../i18n";
 
+const apiUrl = process.env.REACT_APP_API_URL ?? "http://localhost:8000";
+
 interface FormProps {
     language: Language;
 }
@@ -18,7 +20,7 @@ export default function Form({ language }: FormProps) {
         setError("");
 
         try {
-            const response = await fetch("http://localhost:8000/solve", {
+            const response = await fetch(`${apiUrl}/solve`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
